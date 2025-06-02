@@ -1,3 +1,6 @@
+
+![Build Status](https://github.com/swaapnika09/IR_TH/actions/workflows/ci.yml/badge.svg)
+
 # Incident Response and Threat Hunting: A Proactive Security Paradigm
 
 This project provides a full-stack solution to monitor, detect, and investigate cyber threats using open-source tools like TheHive, Cortex, ELK Stack, and custom React dashboards.
