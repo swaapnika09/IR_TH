@@ -1,0 +1,47 @@
+version: '3.7'
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.10
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    ports:
+      - "9200:9200"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.17.10
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.17.10
+    volumes:
+      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    ports:
+      - "5044:5044"
+    depends_on:
+      - elasticsearch
+
+  thehive:
+    image: strangebee/thehive:5.2
+    ports:
+      - "9000:9000"
+    environment:
+      - STORAGE_BACKEND=elasticsearch
+      - ES_URL=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+
+  cortex:
+    image: thehiveproject/cortex:latest
+    ports:
+      - "9001:9001"
+
+volumes:
+  esdata:
